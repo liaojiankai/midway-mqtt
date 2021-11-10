@@ -10,6 +10,22 @@ declare class Topic {
   public qos: 0 | 1 | 2;
 }
 
+// export function matchTopic(filter: string, topic: string) {
+//   const filterArray = filter.split('/');
+//   const length = filterArray.length;
+//   const topicArray = topic.split('/');
+
+//   for (let i = 0; i < length; ++i) {
+//     const left = filterArray[i];
+//     const right = topicArray[i];
+//     if (left === '#') return topicArray.length >= length - 1;
+//     if (left !== '+' && left !== right) return false;
+//   }
+
+//   return length === topicArray.length;
+// }
+
+
 function validateTopic(topic, vTopic) {
   const parts = topic.split('/');
   const vparts = vTopic.split('/');
@@ -41,7 +57,7 @@ function validateTopic(topic, vTopic) {
 }
 
 export class MqttServer extends EventEmitter implements IMqttApplication {
-  public mqclient: mqtt.MqttClient;
+  public mqclient: mqtt.MqttClient & any;
   public subscribeTopics: Array<Topic>;
   public subscribeCallbacks: Map<string, any>;
 
@@ -57,7 +73,7 @@ export class MqttServer extends EventEmitter implements IMqttApplication {
     this.mqclient.subscribe(topic, opts);
 
     try {
-      const topicKey = topic.replace(/^\$queue\//i, '');
+      const topicKey = topic.replace(/^\$queue/i, '');
       this.subscribeTopics.push(topicKey);
       this.subscribeCallbacks.set(topicKey, callback);
     } catch (error) {
@@ -67,8 +83,8 @@ export class MqttServer extends EventEmitter implements IMqttApplication {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setMessageCallback(topicPatten: string, cb: any) {}
 
-  async connect(brokerUrl?: string | any, opts?: any) {
-    this.mqclient = await mqtt.connect(brokerUrl, opts);
+  async connect(url?: string | any, opts?: any) {
+    this.mqclient = await mqtt.connect(url, opts);
 
     this.mqclient.on('connect', () => {
       console.log('[mqtt] 成功连接到服务器 ');
@@ -96,6 +112,15 @@ export class MqttServer extends EventEmitter implements IMqttApplication {
       console.log('[mqtt] client disconnected');
     });
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  publish(topic: string, message: string, qos: 0 | 1 | 2) {}
+  publish(topic: string, message: string, opts: any = {}) {
+    return new Promise((resolve, reject) => {
+      this.mqclient.publish(topic, message, opts, (error, packet) => {
+        if (error) reject(error);
+        resolve(packet);
+      });
+    });
+  }
+  async close() {
+    this.mqclient.close();
+  }
 }

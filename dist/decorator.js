@@ -11,4 +11,3 @@ function MqttListener(topic, opts = { qos: 0 }) {
     };
 }
 exports.MqttListener = MqttListener;
-//# sourceMappingURL=decorator.js.map

@@ -14,12 +14,14 @@ export interface IMqttApplication {
   subscribe(...args): void;
   setMessageCallback(topicPatten: string, cb: any): void;
   connect(...args): void;
-  publish(topic: string, message: string, qos: 0 | 1 | 2): void;
+  publish(topic: string, message: string): void;
+  publish(topic: string, message: string, options: any): void;
+  close(): void;
 }
 
 export interface IMidwayMqttConfigurationOptions extends IConfigurationOptions {
-  mqttUrl: string;
-  mqttOptions?: any;
+  url: string;
+  options?: any;
 }
 
 export type Application = IMidwayMqttApplication;

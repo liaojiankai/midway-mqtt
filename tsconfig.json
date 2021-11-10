@@ -24,7 +24,7 @@
     "module": "commonjs",
     "noFallthroughCasesInSwitch": true,
     "pretty": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "target": "es2018"
   },
   "include": [

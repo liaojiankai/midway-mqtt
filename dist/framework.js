@@ -12,15 +12,16 @@ class MidwayMqttFramework extends core_1.BaseFramework {
     }
     async run() {
         // init connection
-        await this.app.connect(this.configurationOptions.mqttUrl, this.configurationOptions.mqttOptions);
+        await this.app.connect(this.configurationOptions.url, this.configurationOptions.options);
         await this.loadSubscriber();
     }
-    async beforeStop() { }
+    async beforeStop() {
+        await this.app.close();
+    }
     getFrameworkType() {
         return core_1.MidwayFrameworkType.EMPTY;
     }
     async loadSubscriber() {
-        console.log('======== loadSubscriber ========');
         const subscriberModules = core_1.listModule(decorator_1.MS_CONSUMER_KEY, module => {
             const metadata = core_1.getClassMetadata(decorator_1.MS_CONSUMER_KEY, module);
             return metadata.type === decorator_1.MSListenerType.MQTT;
@@ -48,4 +49,3 @@ class MidwayMqttFramework extends core_1.BaseFramework {
     }
 }
 exports.MidwayMqttFramework = MidwayMqttFramework;
-//# sourceMappingURL=framework.js.map

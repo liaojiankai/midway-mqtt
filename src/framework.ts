@@ -38,19 +38,20 @@ export class MidwayMqttFramework extends BaseFramework<
     // init connection
 
     await this.app.connect(
-      this.configurationOptions.mqttUrl,
-      this.configurationOptions.mqttOptions
+      this.configurationOptions.url,
+      this.configurationOptions.options
     );
     await this.loadSubscriber();
   }
 
-  protected async beforeStop(): Promise<void> {}
+  protected async beforeStop(): Promise<void> {
+    await this.app.close();
+  }
 
   public getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.EMPTY;
   }
   private async loadSubscriber() {
-    console.log('======== loadSubscriber ========');
     const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
       const metadata: ConsumerMetadata.ConsumerMetadata = getClassMetadata(
         MS_CONSUMER_KEY,
