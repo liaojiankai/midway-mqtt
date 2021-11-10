@@ -64,8 +64,6 @@ export class MidwayMqttFramework extends BaseFramework<
       const providerId = getProviderId(module);
       const data = listPropertyDataFromClass(MS_CONSUMER_KEY, module);
 
-      console.log('providerId: ', providerId);
-
       for (const methodBindListeners of data) {
         // 循环绑定的方法和监听的配置信息
         // console.log('methodBindListeners: ', methodBindListeners)

@@ -15,22 +15,22 @@ const events_1 = require("events");
 //   }
 //   return length === topicArray.length;
 // }
-function validateTopic(topic, vTopic) {
+function validateTopic(topic, filter) {
     const parts = topic.split('/');
-    const vparts = vTopic.split('/');
+    const vparts = filter.split('/');
     const len = vparts.length;
-    let cv = '';
-    let cpv = '';
+    let left = '';
+    let right = '';
     for (let i = 0; i < len; i++) {
-        cv = parts[i];
-        cpv = vparts[i];
-        if (cv === '+' && cpv) {
+        left = parts[i];
+        right = vparts[i];
+        if (left === '+' && right) {
             continue;
         }
-        if (cpv === '+' && cv) {
+        if (right === '+' && left) {
             continue;
         }
-        if (cv === '#' || cpv === '#') {
+        if (left === '#' || right === '#') {
             return true;
         }
         if (parts[i] !== vparts[i]) {

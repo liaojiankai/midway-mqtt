@@ -29,7 +29,6 @@ class MidwayMqttFramework extends core_1.BaseFramework {
         for (const module of subscriberModules) {
             const providerId = core_1.getProviderId(module);
             const data = core_1.listPropertyDataFromClass(decorator_1.MS_CONSUMER_KEY, module);
-            console.log('providerId: ', providerId);
             for (const methodBindListeners of data) {
                 // 循环绑定的方法和监听的配置信息
                 // console.log('methodBindListeners: ', methodBindListeners)
