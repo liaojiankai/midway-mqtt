@@ -16,7 +16,7 @@ export interface IMqttApplication {
   connect(...args): void;
   publish(topic: string, message: string): void;
   publish(topic: string, message: string, options: any): void;
-  close(): void;
+  // close(): void;
 }
 
 export interface IMidwayMqttConfigurationOptions extends IConfigurationOptions {

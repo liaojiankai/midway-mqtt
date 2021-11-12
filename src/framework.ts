@@ -45,7 +45,7 @@ export class MidwayMqttFramework extends BaseFramework<
   }
 
   protected async beforeStop(): Promise<void> {
-    await this.app.close();
+    // await this.app.close();
   }
 
   public getFrameworkType(): MidwayFrameworkType {

@@ -121,6 +121,6 @@ export class MqttServer extends EventEmitter implements IMqttApplication {
     });
   }
   async close() {
-    this.mqclient.close();
+    // this.mqclient?.close();
   }
 }
