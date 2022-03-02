@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1646125743886" clover="3.2.0">
+  <project timestamp="1646125743886" name="All files">
+    <metrics statements="36" coveredstatements="35" conditionals="28" coveredconditionals="27" methods="2" coveredmethods="2" elements="66" coveredelements="64" complexity="0" loc="36" ncloc="36" packages="1" files="1" classes="1"/>
+    <file name="matchTopic.ts" path="/Users/ernan/Desktop/guangpo/serverless/midway-mqtt/src/matchTopic.ts">
+      <metrics statements="36" coveredstatements="35" conditionals="28" coveredconditionals="27" methods="2" coveredmethods="2"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="6" count="66" type="stmt"/>
+      <line num="7" count="66" type="stmt"/>
+      <line num="8" count="66" type="stmt"/>
+      <line num="9" count="66" type="stmt"/>
+      <line num="10" count="66" type="stmt"/>
+      <line num="11" count="66" type="cond" truecount="2" falsecount="0"/>
+      <line num="12" count="7" type="stmt"/>
+      <line num="14" count="59" type="cond" truecount="2" falsecount="0"/>
+      <line num="15" count="17" type="stmt"/>
+      <line num="17" count="66" type="cond" truecount="2" falsecount="0"/>
+      <line num="19" count="1" type="stmt"/>
+      <line num="20" count="34" type="cond" truecount="2" falsecount="0"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="22" count="33" type="stmt"/>
+      <line num="23" count="33" type="stmt"/>
+      <line num="24" count="33" type="stmt"/>
+      <line num="25" count="33" type="stmt"/>
+      <line num="26" count="33" type="cond" truecount="2" falsecount="0"/>
+      <line num="27" count="33" type="cond" truecount="3" falsecount="1"/>
+      <line num="28" count="0" type="stmt"/>
+      <line num="29" count="33" type="stmt"/>
+      <line num="30" count="93" type="stmt"/>
+      <line num="31" count="93" type="stmt"/>
+      <line num="32" count="93" type="cond" truecount="6" falsecount="0"/>
+      <line num="33" count="20" type="stmt"/>
+      <line num="35" count="73" type="cond" truecount="6" falsecount="0"/>
+      <line num="36" count="7" type="stmt"/>
+      <line num="38" count="66" type="cond" truecount="2" falsecount="0"/>
+      <line num="39" count="16" type="stmt"/>
+      <line num="41" count="10" type="stmt"/>
+      <line num="43" count="1" type="stmt"/>
+      <line num="44" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

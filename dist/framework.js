@@ -3,23 +3,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MidwayMqttFramework = void 0;
 const core_1 = require("@midwayjs/core");
 const decorator_1 = require("@midwayjs/decorator");
-const mq_1 = require("./mq");
+const mqtt_1 = require("./mqtt");
 class MidwayMqttFramework extends core_1.BaseFramework {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async applicationInitialize(options) {
         // Create a connection manager
-        this.app = new mq_1.MqttServer();
+        this.app = new mqtt_1.MqttServer({
+            logger: this.logger,
+        });
     }
+    // protected async afterContainerReady(
+    //   options: Partial<IMidwayBootstrapOptions>
+    // ): Promise<void> {
+    //   // await this.loadSubscriber();
+    // }
     async run() {
         // init connection
         await this.app.connect(this.configurationOptions.url, this.configurationOptions.options);
         await this.loadSubscriber();
+        this.logger.info('[@midwayjs/mqtt] mqtt server start success');
     }
     async beforeStop() {
         await this.app.close();
     }
     getFrameworkType() {
-        return core_1.MidwayFrameworkType.EMPTY;
+        // return '@midwayjs/mqtt';
+        return core_1.MidwayFrameworkType.CUSTOM;
     }
     async loadSubscriber() {
         const subscriberModules = core_1.listModule(decorator_1.MS_CONSUMER_KEY, module => {
@@ -34,17 +43,24 @@ class MidwayMqttFramework extends core_1.BaseFramework {
                 // console.log('methodBindListeners: ', methodBindListeners)
                 for (const listenerOptions of methodBindListeners) {
                     const { propertyKey, options } = listenerOptions;
-                    const ctx = {};
+                    const ctx = { mqttClient: this.app };
                     this.app.createAnonymousContext(ctx);
                     const ins = await ctx.requestContext.getAsync(providerId);
                     const callback = ins[propertyKey];
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const fn = async (topic, payload) => {
+                        callback.call(ins, topic, payload);
+                    };
                     Object.keys(options).forEach(topic => {
                         const opts = options[topic];
-                        this.app.subscribe(topic, opts, callback);
+                        this.app.subscribe(topic, opts, fn);
                     });
                 }
             }
         }
+    }
+    getFrameworkName() {
+        return 'midway:mqtt';
     }
 }
 exports.MidwayMqttFramework = MidwayMqttFramework;

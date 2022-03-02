@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MqttServer = void 0;
 const mqtt = require("mqtt");
 const events_1 = require("events");
+const debug = require('debug')('midway-mqtt');
 // export function matchTopic(filter: string, topic: string) {
 //   const filterArray = filter.split('/');
 //   const length = filterArray.length;
@@ -15,6 +16,7 @@ const events_1 = require("events");
 //   }
 //   return length === topicArray.length;
 // }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function validateTopic(topic, filter) {
     const parts = topic.split('/');
     const vparts = filter.split('/');
@@ -59,17 +61,19 @@ class MqttServer extends events_1.EventEmitter {
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setMessageCallback(topicPatten, cb) { }
+    setMessageCallback(topicPatten, cb) {
+        this.subscribeCallbacks.set(topicPatten, cb);
+    }
     async connect(url, opts) {
         this.mqclient = await mqtt.connect(url, opts);
         this.mqclient.on('connect', () => {
             console.log('[mqtt] 成功连接到服务器 ');
         });
         this.mqclient.on('message', (topic, payload) => {
-            console.log('[mqtt] on message >>>>> ', topic, ': ', payload.toString());
-            this.subscribeCallbacks.forEach((callback, ctopic) => {
-                const current = validateTopic(topic, ctopic);
-                if (current) {
+            debug(`[mqtt] on message >>>>> ', ${topic}, ': ', ${payload.toString()}`);
+            this.subscribeCallbacks.forEach((callback, verifyTopic) => {
+                const current = validateTopic(topic, verifyTopic);
+                if (current && callback) {
                     callback.call(null, topic, payload);
                 }
             });
@@ -93,8 +97,16 @@ class MqttServer extends events_1.EventEmitter {
             });
         });
     }
-    async close() {
-        this.mqclient.close();
+    async close(force, opts) {
+        return new Promise((resolve, reject) => {
+            this.mqclient.end(force, opts, err => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(null);
+            });
+        });
     }
 }
 exports.MqttServer = MqttServer;

@@ -4,6 +4,7 @@ import {
   listModule,
   getClassMetadata,
   listPropertyDataFromClass,
+  // IMidwayBootstrapOptions,
   getProviderId,
 } from '@midwayjs/core';
 
@@ -19,7 +20,7 @@ import {
   IMidwayMqttConfigurationOptions,
 } from './interface';
 
-import { MqttServer } from './mq';
+import { MqttServer } from './mqtt';
 
 export class MidwayMqttFramework extends BaseFramework<
   IMidwayMqttApplication,
@@ -31,25 +32,34 @@ export class MidwayMqttFramework extends BaseFramework<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async applicationInitialize(options) {
     // Create a connection manager
-    this.app = new MqttServer() as unknown as IMidwayMqttApplication;
+    this.app = new MqttServer({
+      logger: this.logger,
+    }) as unknown as IMidwayMqttApplication;
   }
+
+  // protected async afterContainerReady(
+  //   options: Partial<IMidwayBootstrapOptions>
+  // ): Promise<void> {
+  //   // await this.loadSubscriber();
+  // }
 
   public async run(): Promise<void> {
     // init connection
-
     await this.app.connect(
       this.configurationOptions.url,
       this.configurationOptions.options
     );
     await this.loadSubscriber();
+    this.logger.info('[@midwayjs/mqtt] mqtt server start success');
   }
 
   protected async beforeStop(): Promise<void> {
-    // await this.app.close();
+    await this.app.close();
   }
 
   public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.EMPTY;
+    // return '@midwayjs/mqtt';
+    return MidwayFrameworkType.CUSTOM;
   }
   private async loadSubscriber() {
     const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
@@ -69,16 +79,25 @@ export class MidwayMqttFramework extends BaseFramework<
         // console.log('methodBindListeners: ', methodBindListeners)
         for (const listenerOptions of methodBindListeners) {
           const { propertyKey, options } = listenerOptions;
-          const ctx: any = {};
+
+          const ctx = { mqttClient: this.app } as Pick<IMidwayMqttContext, any>;
           this.app.createAnonymousContext(ctx);
           const ins = await ctx.requestContext.getAsync(providerId);
           const callback = ins[propertyKey];
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const fn = async (topic, payload) => {
+            callback.call(ins, topic, payload);
+          };
           Object.keys(options).forEach(topic => {
             const opts = options[topic];
-            this.app.subscribe(topic, opts, callback);
+            this.app.subscribe(topic, opts, fn);
           });
         }
       }
     }
+  }
+
+  public getFrameworkName() {
+    return 'midway:mqtt';
   }
 }

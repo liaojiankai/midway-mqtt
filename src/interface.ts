@@ -3,25 +3,32 @@ import {
   IMidwayApplication,
   IMidwayContext,
 } from '@midwayjs/core';
+import mqtt = require('mqtt');
+import { MqttServer } from './mqtt';
 
 export type IMidwayMqttApplication = IMidwayApplication<IMidwayMqttContext> &
-  IMqttApplication;
+  IMqttApplication &
+  MqttServer;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type IMidwayMqttContext = IMidwayContext<{}>;
+// export type IMidwayMqttContext = IMidwayContext;
+export type IMidwayMqttContext = IMidwayContext<{
+  mqttClient: mqtt.MqttClient;
+}>;
 
 export interface IMqttApplication {
-  subscribe(...args): void;
-  setMessageCallback(topicPatten: string, cb: any): void;
-  connect(...args): void;
+  subscribe(...args): Promise<any>;
+  unsubscribe(topic: string): Promise<any>;
+  updateMessageCallback(topic: string, callback: any): void;
+  // setMessageCallback(topicPatten: string, cb: any): void;
+  connect(url: string, options?: mqtt.IClientOptions): void;
   publish(topic: string, message: string): void;
   publish(topic: string, message: string, options: any): void;
-  // close(): void;
+  close(force?: boolean, opts?: any): Promise<any>;
 }
 
 export interface IMidwayMqttConfigurationOptions extends IConfigurationOptions {
   url: string;
-  options?: any;
+  options?: mqtt.IClientOptions;
 }
 
 export type Application = IMidwayMqttApplication;
@@ -58,3 +65,6 @@ export interface ISubscriptionMap {
     rh?: number;
   };
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Context extends IMidwayMqttContext {}

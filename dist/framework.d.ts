@@ -7,5 +7,6 @@ export declare class MidwayMqttFramework extends BaseFramework<IMidwayMqttApplic
     protected beforeStop(): Promise<void>;
     getFrameworkType(): MidwayFrameworkType;
     private loadSubscriber;
+    getFrameworkName(): string;
 }
 //# sourceMappingURL=framework.d.ts.map

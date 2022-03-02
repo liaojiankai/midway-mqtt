@@ -1,13 +1,18 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-export declare type IMidwayMqttApplication = IMidwayApplication<IMidwayMqttContext> & IMqttApplication;
-export declare type IMidwayMqttContext = IMidwayContext<{}>;
+import mqtt = require('mqtt');
+import { MqttServer } from './mqtt';
+export declare type IMidwayMqttApplication = IMidwayApplication<IMidwayMqttContext> & IMqttApplication & MqttServer;
+export declare type IMidwayMqttContext = IMidwayContext<{
+    mqttClient: mqtt.MqttClient;
+}>;
 export interface IMqttApplication {
-    subscribe(...args: any[]): void;
-    setMessageCallback(topicPatten: string, cb: any): void;
+    subscribe(...args: any[]): Promise<any>;
+    unsubscribe(topic: string): Promise<any>;
+    updateMessageCallback(topic: string, callback: any): void;
     connect(...args: any[]): void;
     publish(topic: string, message: string): void;
     publish(topic: string, message: string, options: any): void;
-    close(): void;
+    close(force?: boolean, opts?: any): Promise<any>;
 }
 export interface IMidwayMqttConfigurationOptions extends IConfigurationOptions {
     url: string;
@@ -34,5 +39,7 @@ export interface ISubscriptionMap {
         rap?: boolean;
         rh?: number;
     };
+}
+export interface Context extends IMidwayMqttContext {
 }
 //# sourceMappingURL=interface.d.ts.map

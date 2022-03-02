@@ -15,4 +15,4 @@ var framework_1 = require("./framework");
 Object.defineProperty(exports, "Framework", { enumerable: true, get: function () { return framework_1.MidwayMqttFramework; } });
 __exportStar(require("./decorator"), exports);
 __exportStar(require("./interface"), exports);
-__exportStar(require("./mq"), exports);
+__exportStar(require("./mqtt"), exports);
