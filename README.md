@@ -32,7 +32,7 @@ const Framework = new Framework().configure({
     // will: { retain: false },
   },
 });
-Bootstrap.load(rabbitMQFramework).run();
+Bootstrap.load(Framework).run();
 ```
 
 整个启动的配置为：

@@ -9,14 +9,14 @@ export interface IMqttApplication {
     subscribe(...args: any[]): Promise<any>;
     unsubscribe(topic: string): Promise<any>;
     updateMessageCallback(topic: string, callback: any): void;
-    connect(...args: any[]): void;
+    connect(url: string, options?: mqtt.IClientOptions): void;
     publish(topic: string, message: string): void;
     publish(topic: string, message: string, options: any): void;
     close(force?: boolean, opts?: any): Promise<any>;
 }
 export interface IMidwayMqttConfigurationOptions extends IConfigurationOptions {
     url: string;
-    options?: any;
+    options?: mqtt.IClientOptions;
 }
 export declare type Application = IMidwayMqttApplication;
 export declare type QoS = 0 | 1 | 2;
