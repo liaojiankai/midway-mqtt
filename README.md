@@ -8,12 +8,12 @@ this module use [mqtt](https://github.com/mqttjs/MQTT.js)
 
 提供了订阅 mqtt 的能力，并能够独立部署和使用。安装 @ernan2/midway-mqtt 模块及其定义。
 
-``` ssh
+``` bash
  npm i @ernan2/midway-mqtt@2 --save
  npm i mqtt --save
 ```
 
-## 入口函数
+### 入口函数
 
 和 Web 一样，创建一个入口文件，指定 Framework 即可。
 
@@ -44,7 +44,7 @@ export type IMidwayMqttConfigurationOptions = {
 }
 ```
 
-## 订阅 mqtt
+### 订阅 mqtt
 
 我们一般把能力分为生产者和消费者，而订阅正是消费者的能力。
 
@@ -118,7 +118,7 @@ export class MqttConsumer {
 
 方法的参数为订阅收到的 topic 和 payload
 
-## mqtt 订阅上下文
+### mqtt 订阅上下文
 
 订阅 mqtt topic的上下文，其中包含每次接收消息的数据。
 从 ctx 上可以取到 mqttClient ，整个 ctx 的定义为：
@@ -135,7 +135,7 @@ export type Context = {
 import { Context } from '@ernan2/midway-mqtt';
 ```
 
-## MqttListener 装饰器参数
+### MqttListener 装饰器参数
 
 @MqttListener 装饰器的第一个参数为 topic，代表需要订阅的 topic。​
 第二个参数是一个 mqtt.IClientSubscribeOptions 对象， 默认值
@@ -175,7 +175,7 @@ export interface IClientSubscribeOptions {
 
 ### 安装依赖
 
-```ssh
+```bash
  npm i @ernan2/midway-mqtt@2 --save
  npm i mqtt --save
 
@@ -267,4 +267,8 @@ export class UserService {
 
 [mqtt.js](https://www.npmjs.com/package/mqtt)
 
-## License
+[Midwayjs rabbitmq](http://www.midwayjs.org/docs/extensions/rabbitmq)
+
+## 联系我(欢迎交流)
+
+<img src="https://user-images.githubusercontent.com/18132383/156308667-458a7672-2e13-4002-b439-eb8978b8b53f.jpg" width="150px">
