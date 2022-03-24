@@ -1,2 +1,5 @@
 src
 .history
+logs
+node_modules
+coverage
