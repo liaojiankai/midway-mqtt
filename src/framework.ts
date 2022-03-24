@@ -1,12 +1,14 @@
+import { BaseFramework } from '@midwayjs/core';
+
 import {
-  BaseFramework,
   MidwayFrameworkType,
   listModule,
   getClassMetadata,
   listPropertyDataFromClass,
   // IMidwayBootstrapOptions,
-  getProviderId,
-} from '@midwayjs/core';
+  // getProviderId,
+  Framework
+} from '@midwayjs/decorator';
 
 import {
   MS_CONSUMER_KEY,
@@ -22,12 +24,20 @@ import {
 
 import { MqttServer } from './mqtt';
 
+@Framework()
 export class MidwayMqttFramework extends BaseFramework<
   IMidwayMqttApplication,
   IMidwayMqttContext,
   IMidwayMqttConfigurationOptions
 > {
   public app: IMidwayMqttApplication;
+
+  configure() {
+    return this.configService.getConfiguration('mqtt');
+  }
+  getApplication() {
+    return this.app;
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async applicationInitialize(options) {
@@ -44,6 +54,7 @@ export class MidwayMqttFramework extends BaseFramework<
   // }
 
   public async run(): Promise<void> {
+    console.log('this.configurationOptions: ', this.configurationOptions)
     // init connection
     await this.app.connect(
       this.configurationOptions.url,
@@ -71,18 +82,16 @@ export class MidwayMqttFramework extends BaseFramework<
     });
 
     for (const module of subscriberModules) {
-      const providerId = getProviderId(module);
+      // const providerId = getProviderId(module);
       const data = listPropertyDataFromClass(MS_CONSUMER_KEY, module);
 
       for (const methodBindListeners of data) {
         // 循环绑定的方法和监听的配置信息
-        // console.log('methodBindListeners: ', methodBindListeners)
         for (const listenerOptions of methodBindListeners) {
           const { propertyKey, options } = listenerOptions;
-
           const ctx = { mqttClient: this.app } as Pick<IMidwayMqttContext, any>;
           this.app.createAnonymousContext(ctx);
-          const ins = await ctx.requestContext.getAsync(providerId);
+          const ins = await ctx.requestContext.getAsync(module);
           const callback = ins[propertyKey];
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const fn = async (topic, payload) => {

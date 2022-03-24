@@ -2,7 +2,7 @@ import mqtt = require('mqtt');
 import { EventEmitter } from 'events';
 import { ILogger } from '@midwayjs/logger';
 // eslint-disable-next-line node/no-extraneous-require
-const debug = require('debug')('midway-mqtt');
+import debug = require('debug')('midway-mqtt');
 import matchTopic from './matchTopic';
 
 export class MqttServer extends EventEmitter {

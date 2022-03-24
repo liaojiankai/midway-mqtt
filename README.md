@@ -9,7 +9,7 @@ this module use [mqtt](https://github.com/mqttjs/MQTT.js)
 提供了订阅 mqtt 的能力，并能够独立部署和使用。安装 @ernan2/midway-mqtt 模块及其定义。
 
 ``` bash
- npm i @ernan2/midway-mqtt@2 --save
+ npm i @ernan2/midway-mqtt@3 --save
  npm i mqtt --save
 ```
 

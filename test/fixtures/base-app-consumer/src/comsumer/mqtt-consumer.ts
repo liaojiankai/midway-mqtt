@@ -3,7 +3,6 @@ import {
   Consumer,
   MSListenerType,
   Inject,
-  Logger,
 } from '@midwayjs/decorator';
 
 import { MqttListener, Context } from '../../../../../src';
@@ -11,7 +10,6 @@ import { MqttListener, Context } from '../../../../../src';
 @Provide()
 @Consumer(MSListenerType.MQTT)
 export class MqttConsumer {
-  @Inject() logger: ILogger;
   @Inject() ctx: Context;
 
   @MqttListener('reply-to/queue', { qos: 0 })
@@ -22,7 +20,7 @@ export class MqttConsumer {
 
   @MqttListener('receive/queue', { qos: 0 })
   async receive(topic: string, payload: Buffer) {
-    // payload.toString() === '{"msg":"hello receive"}'
+    console.log(payload.toString() === '{"msg":"hello receive"}')
   }
 
   @MqttListener('hello/#', { qos: 0 })
