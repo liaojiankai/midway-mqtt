@@ -9,66 +9,33 @@ this module use [mqtt](https://github.com/mqttjs/MQTT.js)
 提供了订阅 mqtt 的能力，并能够独立部署和使用。安装 @ernan2/midway-mqtt 模块及其定义。
 
 ``` bash
- npm i @ernan2/midway-mqtt@3 --save
+ npm i @ernan2/midway-mqtt@2 --save
  npm i mqtt --save
 ```
 
-### 开启组件
+### 入口函数
 
-@ernan2/midway-mqtt 可以作为独立主框架使用。
-
-``` js
-// src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import * as mqtt from '@ernan2/midway-mqtt';
-
-@Configuration({
-  imports: [rabbitmq],
-  // ...
-})
-export class ContainerLifeCycle {
-  async onReady() {
-    // ...
-  }
-}
-```
-
-也可以附加在其他的主框架下，比如 @midwayjs/koa 。
+和 Web 一样，创建一个入口文件，指定 Framework 即可。
 
 ``` js
-// src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import * as koa from '@midwayjs/koa';
-import * as mqtt from '@ernan2/midway-mqtt';
+// server.js
+const { Bootstrap } = require('@midwayjs/bootstrap');
+const Framework = require('@ernan2/midway-mqtt').Framework;
 
-@Configuration({
-  imports: [koa, mqtt],
-  // ...
-})
-export class ContainerLifeCycle {
-  async onReady() {
-    // ...
-  }
-}
+const Framework = new Framework().configure({
+  url: 'mqtt://localhost',
+  options: {
+    username: '',
+    password: '',
+    clientId: '',
+    // clean: true,
+    // will: { retain: false },
+  },
+});
+Bootstrap.load(Framework).run();
 ```
 
-### 配置消费者
-
-我们需要在配置中指定 mqtt 的地址。
-
-``` ts
-// src/config/config.default
-import { MidwayConfig } from '@midwayjs/core';
-
-export default {
-  // ...
-  mqtt: {
-    url: ''
-  } as IMidwayMqttConfigurationOptions
-} as MidwayConfig;
-```
-
-IMidwayMqttConfigurationOptions 定义如下
+整个启动的配置为：
 
 ``` ts
 export type IMidwayMqttConfigurationOptions = {
@@ -81,14 +48,14 @@ export type IMidwayMqttConfigurationOptions = {
 
 我们一般把能力分为生产者和消费者，而订阅正是消费者的能力。
 
-我们一般把消费者放在 consumer 目录。比如 src/consumer/mqtt.consumer.ts
+我们一般把消费者放在 consumer 目录。比如 src/consumer/userConsumer.ts
 
 ``` text
 ➜  my_midway_app tree
 .
 ├── src
 │   ├── consumer
-│   │   └── mqtt.consumer.ts
+│   │   └── userConsumer.ts
 │   └── interface.ts
 ├── test
 ├── package.json
@@ -209,11 +176,11 @@ export interface IClientSubscribeOptions {
 ### 安装依赖
 
 ```bash
- npm i @ernan2/midway-mqtt@3 --save
+ npm i @ernan2/midway-mqtt@2 --save
  npm i mqtt --save
 
  // or
- yarn add @ernan2/midway-mqtt@3
+ yarn add @ernan2/midway-mqtt@2
  yarn add mqtt
 
 ```
