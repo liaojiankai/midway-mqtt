@@ -54,7 +54,6 @@ export class MidwayMqttFramework extends BaseFramework<
   // }
 
   public async run(): Promise<void> {
-    console.log('this.configurationOptions: ', this.configurationOptions)
     // init connection
     await this.app.connect(
       this.configurationOptions.url,
