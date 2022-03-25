@@ -23,7 +23,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as mqtt from '@ernan2/midway-mqtt';
 
 @Configuration({
-  imports: [rabbitmq],
+  imports: [mqtt],
   // ...
 })
 export class ContainerLifeCycle {
